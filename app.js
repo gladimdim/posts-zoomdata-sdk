@@ -45,4 +45,42 @@ const visualize = async () => {
     return visualization;
 };
 
-visualize();
+const initApp = async () => {
+    const visualization = await visualize();
+    visualization.query.validationErrors.subscribeOnNext((err) => {
+        console.log(err);
+    });
+    const rootDom = document.getElementById("controls");
+    const metaData = visualization.metaThread.getLatestResponse();
+    const aggrs = metaData.getAttrAggregations().filter((aggr) => {
+        return aggr.getType() === "TERMS";
+    });
+    const aggrsNames = aggrs.map((aggr) => {
+        return aggr.getName();
+    });
+    const control = createControl(aggrsNames);
+
+    control.addEventListener("change", (e) => {
+        console.log(e.target.value)
+        const firstAggregation = visualization.query.getAggregations(0);
+
+        firstAggregation[0].field.name = e.target.value;
+        visualization.query.setAggregation(0, 0, firstAggregation[0]);
+    });
+    rootDom.appendChild(control);
+}
+
+const createControl = (aggrNames) => {
+    const rootElement = document.createElement("select");
+    rootElement.setAttribute("name", "aggregations");
+    for (let name of aggrNames) {
+        const optionElement = document.createElement("option");
+        optionElement.textContent = name;
+        rootElement.appendChild(
+            optionElement
+        );
+    }
+    return rootElement;
+}
+
+initApp();
