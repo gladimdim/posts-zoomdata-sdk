@@ -1,13 +1,13 @@
 async function initializeClient() {
     const client = await ZoomdataSDK.createClient({
         credentials: {
-            key: 'KhukSxkaka'
+            key: "KVKWiD8kUl"
         },
         application: {
-                secure: false,
-                host: 'localhost',
-                port: 8080,
-                path: '/zoomdata'
+            secure: true,
+            host: "developer.zoomdata.com",
+            port: 443,
+            path: "/zoomdata-2.6"
         }
     });
     return client;
@@ -20,17 +20,17 @@ const visualize = async () => {
         {
             groups: [
                 {
-                    'name': 'userstate',
+                    'name': 'state',
                     'limit': 50,
                     'sort': {
                         'dir': 'asc',
-                        'name': 'userstate'
+                        'name': 'state'
                     }
                 }
             ],
             metrics: [
                 {
-                    name: "plannedsales",
+                    name: "planned_sales",
                     func: "sum"
                 }
             ]
